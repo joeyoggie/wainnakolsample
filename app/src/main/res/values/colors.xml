@@ -3,4 +3,58 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="textColorPrimary">#163D6C</color>
+    <color name="textColorSecondary">#424244</color>
+
+    <color name="facebookColor">#4464a2</color>
+    <color name="googleColor">#d04b46</color>
+
+    <color name="whiteColor">#ffffff</color>
+    <color name="blackColor">#000000</color>
+    <color name="transparentColor">#00000000</color>
+    <color name="lightestGrayColor">#fafafa</color>
+    <color name="lightGrayColor">#EFEFEF</color>
+    <color name="darkGrayColor">#b7b7b7</color>
+    <color name="darkerGrayColor">#8E8B8B</color>
+    <color name="separatorGrayColor">#e9e9e9</color>
+    <color name="listViewGrayBackgroundColor">#c9c9c9</color>
+    <color name="doctorProfileItemTitleGrayBackgroundColor">#ebebeb</color>
+    <color name="appointmentItemGrayBackgroundColor">#d0d0d0</color>
+    <color name="tabSelectedGrayBackgroundColor">#7e7e7e</color>
+    <color name="tabUnselectedGrayBackgroundColor">#c2c0c0</color>
+    <color name="ratingCommentGrayBackgroundColor">#d5d5d5</color>
+    <color name="notificationIconGrayBackgroundColor">#d0d0d0</color>
+    <color name="backgroundGrayPaddingColor">#ebebeb</color>
+    <color name="redColor">#E5473F</color>
+    <color name="blueColor">#0A6AC9</color>
+    <color name="lightBlueColor">#accce6</color>
+    <color name="darkBlueColor">#097abc</color>
+    <color name="blue_30_transparent_background">#48159ede</color>
+    <color name="greenColor">#24d331</color>
+    <color name="lightGreenColor">#1de9b6</color>
+    <color name="darkGreenColor">#00bfa5</color>
+    <color name="lightOrangeColor">#DC8012</color>
+    <color name="darkOrangeColor">#F38820</color>
+    <color name="paleOrangeColor">#E49C46</color>
+    <color name="darkestOrangeColor">#DA4416</color>
+    <color name="orangeProgressColor">#DDA70F</color>
+    <color name="yellowColor">#EFE703</color>
+    <color name="shadowColor">#B3000000</color>
+    <color name="messageSentBackgroundColor">#9FC8DD</color>
+    <color name="messageReceivedBackgroundColor">#E2E2E2</color>
+    <color name="EditTextGrayHintColor">#b8b8b8</color>
+    <color name="black_20_transparent_background">#33000000</color>
+    <color name="black_40_transparent_background">#66000000</color>
+    <color name="black_50_transparent_background">#80000000</color>
+    <color name="black_60_transparent_background">#99000000</color>
+    <color name="black_70_transparent_background">#b3000000</color>
+    <color name="black_75_transparent_background">#bf000000</color>
+
+    <color name="message_sent_background_color">#ffffff</color>
+    <color name="message_received_background_color">#00000000</color>
+
+    <color name="transparent_graylight">#33cacacc</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

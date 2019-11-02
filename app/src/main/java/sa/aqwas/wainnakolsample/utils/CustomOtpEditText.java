@@ -1,4 +1,4 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,16 +19,13 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.vhorus.saloni.barberapp.R;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import in.aabhasjindal.otptextview.ItemView;
 import in.aabhasjindal.otptextview.OTPListener;
-import in.aabhasjindal.otptextview.OtpTextView;
-import in.aabhasjindal.otptextview.Utils;
+import sa.aqwas.wainnakolsample.R;
 
 public class CustomOtpEditText extends FrameLayout {
     private static final int DEFAULT_LENGTH = 4;

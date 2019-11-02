@@ -1,4 +1,4 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 public class Constants {
     public static final String PACKAGE_NAME = "com.vhorus.saloni.barbersapp";

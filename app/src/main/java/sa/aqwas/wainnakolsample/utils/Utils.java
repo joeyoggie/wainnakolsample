@@ -1,4 +1,4 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,8 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.VolleyError;
-import com.vhorus.saloni.barberapp.R;
-import com.vhorus.saloni.barberapp.data.state.ErrorObject;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
@@ -48,6 +46,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import sa.aqwas.wainnakolsample.R;
+import sa.aqwas.wainnakolsample.data.state.ErrorObject;
 
 public class Utils {
     private static final String TAG = Utils.class.getSimpleName();

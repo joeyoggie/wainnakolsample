@@ -1,4 +1,4 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

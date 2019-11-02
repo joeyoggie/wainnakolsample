@@ -1,4 +1,4 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 import android.app.Application;
 import android.app.Notification;
@@ -11,13 +11,12 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.vhorus.saloni.barberapp.R;
-
 import java.util.Locale;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
+import sa.aqwas.wainnakolsample.R;
 
 public class MyApp extends Application {
     private static MyApp mInstance;

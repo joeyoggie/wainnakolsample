@@ -1,4 +1,4 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -6,7 +6,8 @@ import android.content.DialogInterface;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.vhorus.saloni.barberapp.R;
+import sa.aqwas.wainnakolsample.R;
+
 
 public class CustomProgressDialog extends Dialog {
     public static CustomProgressDialog show(Context context, CharSequence title,

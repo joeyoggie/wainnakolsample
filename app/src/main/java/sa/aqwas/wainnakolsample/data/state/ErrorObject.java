@@ -1,0 +1,27 @@
+package sa.aqwas.wainnakolsample.data.state;
+
+public class ErrorObject {
+    private int code;
+    private String message;
+
+    public ErrorObject(){
+        this.code = -1;
+        this.message = "";
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}

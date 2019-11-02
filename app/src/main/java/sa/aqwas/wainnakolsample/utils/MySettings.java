@@ -1,10 +1,11 @@
-package com.vhorus.saloni.barberapp.utils;
+package sa.aqwas.wainnakolsample.utils;
 
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.vhorus.saloni.barberapp.data.db.entities.User;
+
+import sa.aqwas.wainnakolsample.data.db.entities.User;
 
 public class MySettings {
     private static final String TAG = MySettings.class.getSimpleName();
