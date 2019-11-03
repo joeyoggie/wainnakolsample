@@ -192,10 +192,11 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 if(restaurant.getUrl() != null && restaurant.getUrl().length() >= 1 && (restaurant.getUrl().startsWith("http") || restaurant.getUrl().startsWith("https"))){
-                    String url = restaurant.getUrl();
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, restaurant.getName());
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, restaurant.getUrl());
+                    startActivity(Intent.createChooser(shareIntent, "Share Restaurant"));
                 }
             }
         });
@@ -214,7 +215,11 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
         detailsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                if(restaurant.getUrl() != null && restaurant.getUrl().length() >= 1 && (restaurant.getUrl().startsWith("http") || restaurant.getUrl().startsWith("https"))){
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(restaurant.getUrl()));
+                    startActivity(intent);
+                }
             }
         });
     }
