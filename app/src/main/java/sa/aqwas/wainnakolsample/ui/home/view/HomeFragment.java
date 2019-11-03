@@ -20,16 +20,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -49,7 +45,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -59,7 +54,6 @@ import butterknife.ButterKnife;
 import sa.aqwas.wainnakolsample.R;
 import sa.aqwas.wainnakolsample.ui.home.viewmodel.HomeViewModel;
 import sa.aqwas.wainnakolsample.utils.Constants;
-import sa.aqwas.wainnakolsample.utils.MySettings;
 import sa.aqwas.wainnakolsample.utils.Utils;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -125,7 +119,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         searchSettingsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Coming soon!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
             }
         });
 

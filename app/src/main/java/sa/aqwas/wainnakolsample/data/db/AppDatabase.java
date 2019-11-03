@@ -1,4 +1,13 @@
 package sa.aqwas.wainnakolsample.data.db;
 
-public class AppDatabase {
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+
+import sa.aqwas.wainnakolsample.data.db.dao.RestaurantDao;
+import sa.aqwas.wainnakolsample.data.db.entities.Restaurant;
+import sa.aqwas.wainnakolsample.data.db.entities.User;
+
+@Database(entities = {User.class, Restaurant.class}, version = 1)
+public abstract class AppDatabase extends RoomDatabase {
+    public abstract RestaurantDao restaurantDao();
 }

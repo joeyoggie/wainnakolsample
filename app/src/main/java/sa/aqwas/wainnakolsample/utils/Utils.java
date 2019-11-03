@@ -373,7 +373,7 @@ public class Utils {
     }
 
     public static void showLoading(Context context){
-        //customProgressDialog = CustomProgressDialog.show(context, "", "");
+        customProgressDialog = CustomProgressDialog.show(context, "", "");
     }
 
     public static void dismissLoading(){
@@ -548,11 +548,11 @@ public class Utils {
         int code = -1;
         String message = "";
         try {
-            if (jsonObject.has(Constants.PARAMETER_CODE)) {
-                code = jsonObject.getInt(Constants.PARAMETER_CODE);
+            if (jsonObject.has(Constants.PARAMETER_ERROR_CODE)) {
+                code = jsonObject.getInt(Constants.PARAMETER_ERROR_CODE);
             }
-            if (jsonObject.has(Constants.PARAMETER_MESSAGE)) {
-                message = jsonObject.getString(Constants.PARAMETER_MESSAGE);
+            if (jsonObject.has(Constants.PARAMETER_ERROR)) {
+                message = jsonObject.getString(Constants.PARAMETER_ERROR);
             }
         }catch (JSONException e){
 

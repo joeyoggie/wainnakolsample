@@ -2,6 +2,7 @@ package sa.aqwas.wainnakolsample.data.db.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,6 +11,7 @@ public class User implements sa.aqwas.wainnakolsample.data.model.User {
     public static final int USER_TYPE_OWNER = 0;
     public static final int USER_TYPE_WORKER = 1;
 
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
     @SerializedName("id")
     private long id;

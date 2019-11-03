@@ -58,5 +58,7 @@
 
     <color name="color_primary_85_transparent_background">#d9008577</color>
 
+    <color name="white_85_transparent_background">#d9ffffff</color>
+
     <color name="black_overlay">#66000000</color>
 </resources>

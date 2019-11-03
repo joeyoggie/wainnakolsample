@@ -5,20 +5,21 @@ public class Constants {
 
 
     //url constants
-    private static final String DOMAIN_URl = "https://apps.b-social.com";
+    private static final String DOMAIN_URl = "https://wainnakel.com/api/v1";
 
-    public static final String GET_RESTAURANT_URL = DOMAIN_URl + "/mobile/v1/%s/get_restaurant";
+    public static final String GET_RESTAURANT_URL = DOMAIN_URl + "/GenerateFS.php";
 
-    public static final String PARAMETER_STATUS = "check";
-    public static final String PARAMETER_CODE = "code";
-    public static final String PARAMETER_MESSAGE = "msg";
+    public static final String PARAMETER_ERROR = "error";
     public static final String PARAMETER_DATA = "data";
+    public static final String PARAMETER_ERROR_CODE = "error_code";
+
+    public static final String PARAMETER_NO_ERROR = "no";
 
 
     //user item parameters
     public static final String PARAMETER_USER_ID = "id";
     public static final String PARAMETER_USER_NAME = "name";
-
+    
 
     public static final int MAP_DEFAULT_ZOOM_LEVEL = 15;
     public static final int MAP_LOCATION_ZOOM_LEVEL = 12;

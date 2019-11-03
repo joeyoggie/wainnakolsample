@@ -12,23 +12,27 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.transition.TransitionInflater;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.transition.TransitionInflater;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -52,6 +56,9 @@ import com.google.android.gms.tasks.Task;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sa.aqwas.wainnakolsample.R;
+import sa.aqwas.wainnakolsample.data.db.entities.Restaurant;
+import sa.aqwas.wainnakolsample.data.state.StateData;
+import sa.aqwas.wainnakolsample.data.state.StateLiveData;
 import sa.aqwas.wainnakolsample.ui.home.viewmodel.ResultsViewModel;
 import sa.aqwas.wainnakolsample.utils.Constants;
 import sa.aqwas.wainnakolsample.utils.Utils;
@@ -64,10 +71,36 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
     private static final int RC_ACTIVITY_LOCATION_TURN_ON = 1001;
     private static final int REQUEST_CHECK_SETTINGS = 1002;
 
+    @BindView(R.id.restaurantInfoLayout_resultsFragment)
+    LinearLayout restaurantInfoLayout;
+
+    @BindView(R.id.restaurantInfoVisibilityLayout_resultsFragment)
+    LinearLayout restaurantInfoVisibilityLayout;
+    @BindView(R.id.dropdownImageView_resultsFragment)
+    ImageView dropdownImageView;
+
+    @BindView(R.id.restaurantNameTextView_resultsFragment)
+    TextView restaurantNameTextView;
+    @BindView(R.id.restaurantCategoryTextView_resultsFragment)
+    TextView restaurantCategoryTextView;
+    @BindView(R.id.restaurantRatingTextView_resultsFragment)
+    TextView restaurantRatingTextView;
+
+    @BindView(R.id.mapsImageView_resultsFragment)
+    ImageView mapsImageView;
+    @BindView(R.id.shareImageView_resultsFragment)
+    ImageView shareImageView;
+    @BindView(R.id.favoriteImageView_resultsFragment)
+    ImageView favoriteImageView;
+    @BindView(R.id.imagesImageView_resultsFragment)
+    ImageView imagesImageView;
+    @BindView(R.id.detailsImageView_resultsFragment)
+    ImageView detailsImageView;
+
     @BindView(R.id.searchButton_resultsFragment)
     Button searchButton;
 
-    private ResultsViewModel mViewModel;
+    private ResultsViewModel resultsViewModel;
 
     private GoogleMap mMap;
 
@@ -78,6 +111,12 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
 
     private double latitude = 0;
     private double longitude = 0;
+
+    private Restaurant restaurant;
+
+    private boolean isInfoVisible = true;
+    private ObjectAnimator hidingAnimation;
+    private ObjectAnimator showingAnimation;
 
     public static ResultsFragment newInstance() {
         return new ResultsFragment();
@@ -91,6 +130,7 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
 
         setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
 
+        resultsViewModel = ViewModelProviders.of(this).get(ResultsViewModel.class);
 
         if(getArguments() != null && getArguments().containsKey("latitude")) {
             latitude = getArguments().getDouble("latitude");
@@ -102,32 +142,136 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView_resultsFragment);
         mapFragment.getMapAsync(this);
 
+        setOnClickListeners();
+
+        hidingAnimation = ObjectAnimator.ofFloat(restaurantInfoLayout, "translationY", 0, -250f); //TODO needs adjustments for different screen densities
+        hidingAnimation.setDuration(500);
+        //hidingAnimation.start();
+
+        showingAnimation = ObjectAnimator.ofFloat(restaurantInfoLayout, "translationY", -250f, 0f); //TODO needs adjustments for different screen densities
+        showingAnimation.setDuration(500);
+        //showingAnimation.start();
+
+
+        //use viewmodel to observe restaurant data
+        observeUI(resultsViewModel.getRestaurantObservable());
+
+        return view;
+    }
+
+    private void setOnClickListeners(){
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO search again
+                //search again
+                loadRestaurant(latitude, longitude);
+            }
+        });
 
-                Toast.makeText(getActivity(), "searching", Toast.LENGTH_SHORT).show();
-
-                if(mMap != null) {
-                    mMap.clear();
-                    //TODO move below code to the restaurant livedata observed from the viewmodel
-                    // Add a marker to restaurant location and move the camera.
-                    LatLng restaurantLocation = new LatLng(latitude, longitude);
-                    mMap.addMarker(new MarkerOptions().position(restaurantLocation).title("Restaurant 2"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, Constants.MAP_LOCATION_ZOOM_LEVEL));
+        restaurantInfoVisibilityLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isInfoVisible){
+                    hideInfo();
+                }else{
+                    showInfo();
                 }
             }
         });
 
-        //TODO use viewmodel to get next random restaurant
+        mapsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr="+latitude + "," + longitude
+                                +"&daddr=" + restaurant.getLatitude() + "," + restaurant.getLongitude()));
+                startActivity(intent);
+            }
+        });
+        shareImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(restaurant.getUrl() != null && restaurant.getUrl().length() >= 1 && (restaurant.getUrl().startsWith("http") || restaurant.getUrl().startsWith("https"))){
+                    String url = restaurant.getUrl();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            }
+        });
+        favoriteImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+            }
+        });
+        imagesImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+            }
+        });
+        detailsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-        return view;
+    private void showInfo(){
+        //show info
+        showingAnimation.start();
+        dropdownImageView.setImageResource(R.drawable.ic_arrow_drop_up);
+        isInfoVisible = true;
+    }
+
+    private void hideInfo(){
+        //hide info
+        hidingAnimation.start();
+        dropdownImageView.setImageResource(R.drawable.ic_arrow_drop_down);
+        isInfoVisible = false;
     }
 
     @Override
     public void onViewCreated (View view, Bundle savedInstanceState){
         mNavController = Navigation.findNavController(view);
+    }
+
+    private void loadRestaurant(double latitude, double longitude){
+        resultsViewModel.loadRestaurant(latitude, longitude);
+    }
+
+    private void observeUI(StateLiveData<Restaurant> liveData) {
+        // Update the list when the data changes
+        liveData.observe(this, new Observer<StateData<Restaurant>>() {
+            @Override
+            public void onChanged(@Nullable StateData<Restaurant> restaurantStateData) {
+                if(restaurantStateData.getStatus() == StateData.DataStatus.LOADING){
+                    //show loading
+                    Utils.showLoading(getActivity());
+                }
+                else if(restaurantStateData.getStatus() == StateData.DataStatus.SUCCESS){
+                    Utils.dismissLoading();
+                    restaurant = restaurantStateData.getData();
+
+                    restaurantNameTextView.setText(""+restaurant.getName());
+                    restaurantCategoryTextView.setText(""+restaurant.getCategory());
+                    restaurantRatingTextView.setText(getActivity().getResources().getString(R.string.rating, restaurant.getRating()));
+
+                    if(mMap != null) {
+                        mMap.clear();
+                        // Add a marker to restaurant location and move the camera.
+                        LatLng restaurantLocation = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(restaurantLocation).title(restaurantStateData.getData().getName()));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, Constants.MAP_LOCATION_ZOOM_LEVEL));
+                    }
+                }else if(restaurantStateData.getStatus() == StateData.DataStatus.ERROR){
+                    Utils.dismissLoading();
+                    Utils.showError(restaurantStateData.getError(), getActivity());
+                }
+            }
+        });
     }
 
     @Override
@@ -137,11 +281,7 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
         //check location permissions
         checkLocationPermissions();
 
-        //TODO move below code to the restaurant livedata observed from the viewmodel
-        // Add a marker to restaurant location and move the camera.
-        LatLng restaurantLocation = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(restaurantLocation).title("Restaurant"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, Constants.MAP_LOCATION_ZOOM_LEVEL));
+        loadRestaurant(latitude, longitude);
     }
 
     private void getUserLocation(){
