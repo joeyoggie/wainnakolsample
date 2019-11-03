@@ -12,28 +12,23 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.FragmentNavigator;
+import androidx.transition.TransitionInflater;
+
+import android.provider.Settings;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -57,27 +52,22 @@ import com.google.android.gms.tasks.Task;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sa.aqwas.wainnakolsample.R;
-import sa.aqwas.wainnakolsample.ui.home.viewmodel.HomeViewModel;
+import sa.aqwas.wainnakolsample.ui.home.viewmodel.ResultsViewModel;
 import sa.aqwas.wainnakolsample.utils.Constants;
-import sa.aqwas.wainnakolsample.utils.MySettings;
 import sa.aqwas.wainnakolsample.utils.Utils;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
-    private static final String TAG = HomeFragment.class.getSimpleName();
+public class ResultsFragment extends Fragment implements OnMapReadyCallback {
+    private static final String TAG = ResultsFragment.class.getSimpleName();
 
     private static final int RC_PERMISSION_LOCATION = 1004;
     private static final int RC_ACTIVITY_PERMISSION_TURN_ON = 1000;
     private static final int RC_ACTIVITY_LOCATION_TURN_ON = 1001;
     private static final int REQUEST_CHECK_SETTINGS = 1002;
 
-    @BindView(R.id.searchButton_homeFragment)
+    @BindView(R.id.searchButton_resultsFragment)
     Button searchButton;
-    @BindView(R.id.searchLayout_homeFragment)
-    LinearLayout searchLayout;
-    @BindView(R.id.searchSettingsImageView_homeFragment)
-    ImageView searchSettingsImageView;
 
-    private HomeViewModel homeViewModel;
+    private ResultsViewModel mViewModel;
 
     private GoogleMap mMap;
 
@@ -89,46 +79,48 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private double latitude = 0;
     private double longitude = 0;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+    public static ResultsFragment newInstance() {
+        return new ResultsFragment();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.results_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
 
 
-        ObjectAnimator verticalAnimation = ObjectAnimator.ofFloat(searchLayout, "translationY", 1000f, 0f);
-        verticalAnimation.setDuration(750);
-        verticalAnimation.start();
+        if(getArguments() != null && getArguments().containsKey("latitude")) {
+            latitude = getArguments().getDouble("latitude");
+        }
+        if(getArguments() != null && getArguments().containsKey("longitude")) {
+            longitude = getArguments().getDouble("longitude");
+        }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView_homeFragment);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView_resultsFragment);
         mapFragment.getMapAsync(this);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //go to results fragment
-                //FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder().addSharedElement(searchButton, searchButton.getTransitionName()).build();
+                //TODO search again
 
-                FragmentNavigator.Extras.Builder builder = new FragmentNavigator.Extras.Builder();
-                builder.addSharedElement(searchButton, searchButton.getTransitionName());
-                FragmentNavigator.Extras extras = builder.build();
+                Toast.makeText(getActivity(), "searching", Toast.LENGTH_SHORT).show();
 
-                //pass the lat/lng values to the results fragment
-                Bundle bundle = new Bundle();
-                bundle.putDouble("latitude", latitude);
-                bundle.putDouble("longitude", longitude);
-                mNavController.navigate(R.id.action_nav_homeFragment_to_resultsFragment, bundle, null, extras);
+                if(mMap != null) {
+                    mMap.clear();
+                    //TODO move below code to the restaurant livedata observed from the viewmodel
+                    // Add a marker to restaurant location and move the camera.
+                    LatLng restaurantLocation = new LatLng(latitude, longitude);
+                    mMap.addMarker(new MarkerOptions().position(restaurantLocation).title("Restaurant 2"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, Constants.MAP_LOCATION_ZOOM_LEVEL));
+                }
             }
         });
 
-        searchSettingsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Coming soon!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        //TODO use viewmodel to get next random restaurant
 
         return view;
     }
@@ -144,6 +136,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         //check location permissions
         checkLocationPermissions();
+
+        //TODO move below code to the restaurant livedata observed from the viewmodel
+        // Add a marker to restaurant location and move the camera.
+        LatLng restaurantLocation = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(restaurantLocation).title("Restaurant"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, Constants.MAP_LOCATION_ZOOM_LEVEL));
     }
 
     private void getUserLocation(){
@@ -162,9 +160,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             latitude = userLocation.latitude;
                             longitude = userLocation.longitude;
                             // Move the map's camera to the user location.
-                            if(mMap != null && isResumed()) {
+                            /*if(mMap != null && isResumed()) {
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, Constants.MAP_DEFAULT_ZOOM_LEVEL));
-                            }
+                            }*/
                         }
                     }
                 });
@@ -201,9 +199,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             latitude = userLocation.latitude;
                             longitude = userLocation.longitude;
                             // Move the map's camera to the user location.
-                            if(mMap != null && isResumed()) {
+                            /*if(mMap != null && isResumed()) {
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, Constants.MAP_DEFAULT_ZOOM_LEVEL));
-                            }
+                            }*/
                         }
                     };
                 };
@@ -246,34 +244,32 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private boolean checkLocationServices(){
         boolean enabled = true;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(getActivity() != null && getActivity().getSystemService(Context.LOCATION_SERVICE) != null){
-                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                boolean isGpsProviderEnabled, isNetworkProviderEnabled;
-                isGpsProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                isNetworkProviderEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if(getActivity() != null && getActivity().getSystemService(Context.LOCATION_SERVICE) != null){
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            boolean isGpsProviderEnabled, isNetworkProviderEnabled;
+            isGpsProviderEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isNetworkProviderEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-                if(!isGpsProviderEnabled && !isNetworkProviderEnabled) {
-                    enabled = false;
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(Utils.getString(getActivity(), R.string.location_required_title));
-                    builder.setMessage(Utils.getString(getActivity(), R.string.location_required_message));
-                    builder.setCancelable(false);
-                    builder.setPositiveButton(Utils.getString(getActivity(), R.string.go_to_location_settings), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            startActivityForResult(intent, RC_ACTIVITY_LOCATION_TURN_ON);
-                        }
-                    });
-                    builder.setNegativeButton(Utils.getString(getActivity(), R.string.exit), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            getActivity().finish();
-                        }
-                    });
-                    builder.show();
-                }
+            if(!isGpsProviderEnabled && !isNetworkProviderEnabled) {
+                enabled = false;
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(Utils.getString(getActivity(), R.string.location_required_title));
+                builder.setMessage(Utils.getString(getActivity(), R.string.location_required_message));
+                builder.setCancelable(false);
+                builder.setPositiveButton(Utils.getString(getActivity(), R.string.go_to_location_settings), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, RC_ACTIVITY_LOCATION_TURN_ON);
+                    }
+                });
+                builder.setNegativeButton(Utils.getString(getActivity(), R.string.exit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finish();
+                    }
+                });
+                builder.show();
             }
         }
         return enabled;

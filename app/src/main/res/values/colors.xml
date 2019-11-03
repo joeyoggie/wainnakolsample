@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="textColorPrimary">#163D6C</color>
+    <color name="textColorPrimary">#008577</color>
     <color name="textColorSecondary">#424244</color>
 
     <color name="facebookColor">#4464a2</color>
@@ -55,6 +55,8 @@
     <color name="message_received_background_color">#00000000</color>
 
     <color name="transparent_graylight">#33cacacc</color>
+
+    <color name="color_primary_85_transparent_background">#d9008577</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>

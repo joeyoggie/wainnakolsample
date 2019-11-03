@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sa.aqwas.wainnakolsample">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:name=".utils.MyApp"
         android:allowBackup="true"
@@ -10,6 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FullscreenTheme">
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB2nLsjEoSMMNpjrMw_Cfj5weWKHjgAsQU"/>
+
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"

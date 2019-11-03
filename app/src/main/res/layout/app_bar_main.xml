@@ -15,22 +15,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/Toolbar.Transparent"
             android:background="?attr/colorPrimary"
-            app:navigationIcon="@drawable/ic_audiotrack_dark"
             android:textAlignment="center"
             android:layout_gravity="center"
             android:gravity="center"
-            app:titleTextColor="@color/transparentColor" >
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:textColor="@color/whiteColor"
-                android:text="@string/app_name"/>
-        </androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@color/whiteColor" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

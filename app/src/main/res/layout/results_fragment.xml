@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.view.ResultsFragment">
+
+    <RelativeLayout
+        android:id="@+id/restaurantInfoLayout_resultsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/whiteColor">
+
+    </RelativeLayout>
+
+    <fragment
+        android:id="@+id/mapView_resultsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/restaurantInfoLayout_resultsFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <Button
+        android:id="@+id/searchButton_resultsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:layout_alignParentBottom="true"
+        android:transitionName="buttonTransition"
+        android:background="@drawable/background_round_color_primary"
+        android:textColor="@color/whiteColor"
+        android:text="@string/search"/>
+
+    <Button
+        android:id="@+id/testButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:transitionName="buttonTransition"
+        android:background="@drawable/background_round_color_primary"
+        android:textColor="@color/whiteColor"
+        android:text="test"/>
+
+
+</RelativeLayout>
