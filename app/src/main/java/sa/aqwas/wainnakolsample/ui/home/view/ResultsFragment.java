@@ -47,6 +47,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -268,7 +269,12 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
                         mMap.clear();
                         // Add a marker to restaurant location and move the camera.
                         LatLng restaurantLocation = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
-                        mMap.addMarker(new MarkerOptions().position(restaurantLocation).title(restaurantStateData.getData().getName()));
+                        // Uses a custom icon.
+                        mMap.addMarker(new MarkerOptions()
+                                .position(restaurantLocation)
+                                .title(restaurant.getName())
+                                .snippet(restaurant.getCategory())
+                                /*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_info_outline))*/);
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(restaurantLocation, Constants.MAP_LOCATION_ZOOM_LEVEL));
                     }
                 }else if(restaurantStateData.getStatus() == StateData.DataStatus.ERROR){
