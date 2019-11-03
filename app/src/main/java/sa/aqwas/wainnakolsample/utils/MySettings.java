@@ -46,7 +46,7 @@ public class MySettings {
             return activeLanguage;
         } else {
             SharedPreferences prefs = getSettings();
-            activeLanguage = prefs.getString(PREF_ACTIVE_LANGUAGE, "ar");
+            activeLanguage = prefs.getString(PREF_ACTIVE_LANGUAGE, "en");
             return activeLanguage;
         }
     }

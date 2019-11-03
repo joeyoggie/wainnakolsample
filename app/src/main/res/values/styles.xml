@@ -37,6 +37,8 @@
         <item name="android:background">@color/transparentColor</item>
     </style>
 
+    <style name="Toolbar.Transparent" parent="ThemeOverlay.AppCompat.Dark" />
+
 
     <style name="TextInputLayoutDarkBackgroundTheme" parent="Theme.AppCompat">
         <!-- Hint color and label color in FALSE state -->
