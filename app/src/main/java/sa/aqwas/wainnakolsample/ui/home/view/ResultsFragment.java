@@ -263,7 +263,7 @@ public class ResultsFragment extends Fragment implements OnMapReadyCallback {
 
                     restaurantNameTextView.setText(""+restaurant.getName());
                     restaurantCategoryTextView.setText(""+restaurant.getCategory());
-                    restaurantRatingTextView.setText(getActivity().getResources().getString(R.string.rating, restaurant.getRating()));
+                    restaurantRatingTextView.setText(getActivity().getResources().getString(R.string.rating, ""+restaurant.getRating()));
 
                     if(mMap != null) {
                         mMap.clear();

@@ -10,7 +10,7 @@
     <string name="search_again">Search Again</string>
     <string name="search_hint">Press Search to get a random and awesome suggestion!</string>
 
-    <string name="rating">%d/10</string>
+    <string name="rating">%s/10</string>
 
     <string name="coming_soon">Coming soon!</string>
 
