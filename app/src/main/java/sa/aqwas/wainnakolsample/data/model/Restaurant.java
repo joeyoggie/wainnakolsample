@@ -5,7 +5,7 @@ public interface Restaurant {
     String getName();
     String getCategory();
     String getUrl();
-    int getRating();
+    double getRating();
     double getLatitude();
     double getLongitude();
 }

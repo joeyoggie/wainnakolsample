@@ -25,7 +25,7 @@ public class Restaurant implements sa.aqwas.wainnakolsample.data.model.Restauran
     private String url;
     @ColumnInfo(name = "rating")
     @SerializedName("rating")
-    private int rating;
+    private double rating;
     @ColumnInfo(name = "latitude")
     @SerializedName("lat")
     private double latitude;
@@ -80,11 +80,11 @@ public class Restaurant implements sa.aqwas.wainnakolsample.data.model.Restauran
     }
 
     @Override
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
